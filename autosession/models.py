@@ -1,0 +1,75 @@
+from django.contrib.auth.models import User
+from django.db import models
+
+# Create your models here.
+class tune(models.Model):
+    tune_id = models.AutoField(primary_key=True)
+    name = models.CharField('Tune Name', max_length=300)
+    parts = models.IntegerField('Number of Parts in Tune')
+
+    def __str__(self):
+        return f'{self.name}'
+
+class key(models.Model):
+    key_id = models.AutoField(primary_key=True)
+    key_type_char = models.CharField('Key', max_length=15, unique=True)
+
+    def __str__(self):
+        return f'{self.key_type_char}'
+
+class tune_type(models.Model):
+    tune_type_id = models.AutoField(primary_key=True)
+    tune_type_char = models.CharField('Tune Type', max_length=50, unique=True)
+
+    def __str__(self):
+        return f'{self.tune_type_char}'
+
+class instrument(models.Model):
+    instrument_id = models.AutoField(primary_key=True)
+    instrument_name = models.CharField('Instrument', max_length=50, unique=True)
+
+    def __str__(self):
+        return f'{self.instrument_name}'
+
+class note(models.Model):
+    note_id = models.AutoField(primary_key=True)
+    note_char = models.CharField('Note', max_length=50, unique=True)
+
+    def __str__(self):
+        return f'{self.note_char}'
+
+# TODO Extend User Models to Add Artist Fields
+"""
+- inturments
+- location
+- years playing irish music
+"""
+
+class recording(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    added = models.DateTimeField(auto_now_add=True)
+    recording_id = models.AutoField(primary_key=True)
+    recording_url = models.URLField('Recording URL', blank=True)
+    date_recorded = models.DateField(blank=True)
+    tune = models.ForeignKey(tune, on_delete=models.CASCADE, verbose_name="Tune", blank='True', null=True)
+    tune_type = models.ForeignKey(tune_type, on_delete=models.CASCADE, verbose_name="Tune Type", blank='True', null=True)
+    key = models.ForeignKey(key, on_delete=models.CASCADE, verbose_name="Key of Tune", blank='True', null=True)
+    insturment = models.ForeignKey(instrument, on_delete=models.CASCADE, verbose_name="Instrument used during recording", blank='True', null=True)
+    bpm = models.IntegerField('Beats Per Minute of Recording')
+    bpm_note = models.ForeignKey(note, on_delete=models.CASCADE, verbose_name="BPM Note", blank='True', null=True)
+    beats_space = models.IntegerField('Beats Before Count-In', blank=False)
+    beats_countin = models.IntegerField('Beats That Are Count In Before Tune Plays', blank=False)
+    beats_ending = models.IntegerField('Beats After Tune Stops Playing', blank=False)
+    repeats = models.IntegerField('Number of Repeats of Tune On Recording', blank=False)
+    pickup_beats = models.FloatField('Number of Pick Up Beats Into First Beat of First A Part', blank=False)
+    #reference_recording = models.ForeignKey(recording, on_delete=models.CASCADE, verbose_name='Recording that was used to as'\ 
+    #                                                                                           'reference during this recording')
+    
+    #TODO
+    #date_updated = models.DateTimeField()
+
+    def __str__(self):
+        return f'{self.recording_id}'
+    
+    class Meta:
+        ordering = ['recording_id']
