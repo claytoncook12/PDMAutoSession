@@ -50,7 +50,7 @@ class Recording(models.Model):
     added = models.DateTimeField(auto_now_add=True)
     recording_id = models.AutoField(primary_key=True)
     recording_url = models.URLField('Recording URL', null=True, blank=True)
-    date_recorded = models.DateField(blank=True)
+    date_recorded = models.DateField(null=True, blank=True)
     tune = models.ForeignKey(Tune, on_delete=models.CASCADE, verbose_name="Tune", null=True, blank=True)
     tune_type = models.ForeignKey(TuneType, on_delete=models.CASCADE, verbose_name="Tune Type", null=True, blank=True)
     key = models.ForeignKey(Key, on_delete=models.CASCADE, verbose_name="Key of Tune", null=True, blank=True)
