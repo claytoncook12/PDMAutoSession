@@ -69,7 +69,7 @@ class Recording(models.Model):
     #date_updated = models.DateTimeField()
 
     def __str__(self):
-        return f'{self.recording_id}'
+        return f'{self.user.get_username()}_rid{self.recording_id}_{self.tune.name}_{self.insturment}'
     
     class Meta:
         ordering = ['recording_id']
