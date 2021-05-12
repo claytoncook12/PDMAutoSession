@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
-class tune(models.Model):
+class Tune(models.Model):
     tune_id = models.AutoField(primary_key=True)
     name = models.CharField('Tune Name', max_length=300)
     parts = models.IntegerField('Number of Parts in Tune')
@@ -10,28 +10,28 @@ class tune(models.Model):
     def __str__(self):
         return f'{self.name}'
 
-class key(models.Model):
+class Key(models.Model):
     key_id = models.AutoField(primary_key=True)
     key_type_char = models.CharField('Key', max_length=15, unique=True)
 
     def __str__(self):
         return f'{self.key_type_char}'
 
-class tune_type(models.Model):
+class TuneType(models.Model):
     tune_type_id = models.AutoField(primary_key=True)
     tune_type_char = models.CharField('Tune Type', max_length=50, unique=True)
 
     def __str__(self):
         return f'{self.tune_type_char}'
 
-class instrument(models.Model):
+class Instrument(models.Model):
     instrument_id = models.AutoField(primary_key=True)
     instrument_name = models.CharField('Instrument', max_length=50, unique=True)
 
     def __str__(self):
         return f'{self.instrument_name}'
 
-class note(models.Model):
+class Note(models.Model):
     note_id = models.AutoField(primary_key=True)
     note_char = models.CharField('Note', max_length=50, unique=True)
 
@@ -45,7 +45,7 @@ class note(models.Model):
 - years playing irish music
 """
 
-class recording(models.Model):
+class Recording(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     added = models.DateTimeField(auto_now_add=True)
     recording_id = models.AutoField(primary_key=True)
