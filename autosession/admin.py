@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import tune, key, instrument, note, recording
+from .models import Tune, Key, Instrument, Note, Recording
 
 # Register your models here.
-admin.site.register(tune)
-admin.site.register(key)
-admin.site.register(instrument)
-admin.site.register(note)
-admin.site.register(recording)
+admin.site.register(Tune)
+admin.site.register(Key)
+admin.site.register(Instrument)
+admin.site.register(Note)
+admin.site.register(Recording)
