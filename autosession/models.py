@@ -23,25 +23,25 @@ class Key(models.Model):
     key_type_char = models.CharField('Key', max_length=15, unique=True)
 
     def __str__(self):
-        return f'{self.key_type_char}'
+        return self.key_type_char
 
 class Instrument(models.Model):
     instrument_id = models.AutoField(primary_key=True)
     instrument_name = models.CharField('Instrument', max_length=50, unique=True)
 
     def __str__(self):
-        return f'{self.instrument_name}'
+        return self.instrument_name
 
 class Note(models.Model):
     note_id = models.AutoField(primary_key=True)
     note_char = models.CharField('Note', max_length=50, unique=True)
 
     def __str__(self):
-        return f'{self.note_char}'
+        return self.note_char
 
 # TODO Extend User Models to Add Artist Fields
 """
-- inturments
+- insturments
 - location
 - years playing irish music
 """

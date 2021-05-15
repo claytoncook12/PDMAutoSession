@@ -2,8 +2,8 @@ from django.shortcuts import render
 
 from rest_framework import generics
 
-from .models import TuneType, Tune
-from .serializers import TuneTypeSerializer, TuneSerializer
+from .models import TuneType, Tune, Recording
+from .serializers import TuneTypeSerializer, TuneSerializer, RecordingSerializer
 
 class TuneTypeList(generics.ListCreateAPIView):
     queryset = TuneType.objects.all()
@@ -21,5 +21,11 @@ class TuneDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Tune.objects.all()
     serializer_class = TuneSerializer
 
+class RecordingList(generics.ListCreateAPIView):
+    queryset = Recording.objects.all()
+    serializer_class = RecordingSerializer
 
+class RecordingDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Recording.objects.all()
+    serializer_class = RecordingSerializer
 
