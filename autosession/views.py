@@ -1,4 +1,6 @@
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.views import View
 
 from rest_framework import generics
 
@@ -29,3 +31,8 @@ class RecordingDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Recording.objects.all()
     serializer_class = RecordingSerializer
 
+class GenerateJigSet(View):
+    def get(self, request):
+        results = []
+
+        return JsonResponse({'results': results})
