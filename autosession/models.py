@@ -8,7 +8,7 @@ class Tune(models.Model):
     parts = models.IntegerField('Number of Parts in Tune')
 
     def __str__(self):
-        return f'{self.name}'
+        return self.name
 
 class Key(models.Model):
     key_id = models.AutoField(primary_key=True)
