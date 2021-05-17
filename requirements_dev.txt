@@ -1,0 +1,7 @@
+Django==3.2.2
+djangorestframework==3.12.4
+pydub==0.25.1
+
+
+pylint==2.6.0
+notebook
