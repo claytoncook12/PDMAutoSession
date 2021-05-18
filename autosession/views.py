@@ -1,6 +1,8 @@
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views import View
+from django.conf import settings
+from django.shortcuts import redirect
 
 from rest_framework import generics
 
@@ -112,4 +114,8 @@ class GenerateSet(View):
         # Create Set File
         combine_tunes(tunes, set_fname)
 
-        return JsonResponse({'set': set_fname, 'tunes': tunes})
+        # See results response
+        # return JsonResponse({'set': set_fname, 'tunes': tunes})
+
+        # Redirect to new file created
+        return redirect(settings.MEDIA_URL + set_fname)
