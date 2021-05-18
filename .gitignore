@@ -1,10 +1,10 @@
-# Environments 
-.env 
-.venv 
-env/ 
-venv/ 
-ENV/ 
-env.bak/ 
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
 venv.bak/
 
 # Django #
@@ -15,33 +15,35 @@ __pycache__
 db.sqlite3
 media
 
-# Python # 
-*.py[cod] 
+# Python #
+*.py[cod]
 *$py.class
 
-# Installer logs 
-pip-log.txt 
-pip-delete-this-directory.txt 
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
 
-# Unit test / coverage reports 
-htmlcov/ 
-.tox/ 
-.coverage 
-.coverage.* 
-.cache 
-.pytest_cache/ 
-nosetests.xml 
-coverage.xml 
-*.cover 
-.hypothesis/ 
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
 
-# Jupyter Notebook 
+# Jupyter Notebook
 .ipynb_checkpoints
 
-# Visual Studio Code # 
-.vscode/* 
-!.vscode/settings.json 
-!.vscode/tasks.json 
-!.vscode/launch.json 
-!.vscode/extensions.json 
+# Visual Studio Code #
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .history
+
+autosession/media
