@@ -1,7 +1,12 @@
+# FFMPEG 4.4 for windows
+# Requirement of pydub
+# choco install ffmpeg
+# C:\ProgramData\chocolatey\lib\ffmpeg\tools
+
 Django==3.2.2
 djangorestframework==3.12.4
 pydub==0.25.1
-
+requests
 
 pylint==2.6.0
 notebook
