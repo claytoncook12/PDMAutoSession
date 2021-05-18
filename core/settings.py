@@ -123,7 +123,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Generated Audio Files Location
-MEDIA_ROOT = os.path.join(BASE_DIR, "autosession\\media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "autosession",
+                          "media")
 MEDIA_URL = 'autosession/media/'
 
 
@@ -133,6 +134,6 @@ MEDIA_URL = 'autosession/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
-    
+
 }
 

@@ -4,6 +4,7 @@ Functions for creating tunes and tune sets from individual
 recordings in the autosession database
 """
 
+from pathlib import Path
 import os
 from datetime import datetime
 
@@ -13,30 +14,30 @@ import requests
 from pydub import AudioSegment
 
 # Setup location for media files
-media_root = settings.MEDIA_ROOT
+media_root = Path(settings.MEDIA_ROOT)
 
 def mspb(beats_per_minute):
     """
     Calculates milliseconds per beat from beats per minute
-    
+
     Parameters
     ----------
         beats_per_minute (int or float)
-    
+
     Returns
     -------
         float: seconds per beat
     """
-    
+
     bpm = float(beats_per_minute)
-    
+
     return (60/bpm)*1000
 
 def tune_played_time_start_stop(bpm,beats_space,beats_coutin,pickup_beats,played_num,
                                 parts,measures_in_parts=16,beats_per_measure=2):
     """
     Calculates milliseconds for beginning and end of X time through tune
-    
+
     Parameters
     ----------
         bpm (int): beats per minute
@@ -49,18 +50,18 @@ def tune_played_time_start_stop(bpm,beats_space,beats_coutin,pickup_beats,played
             Default = 16
         beats_per_measure (int)(optional): beats per measure
             Default = 2
-    
+
     Returns
     -------
         dict: list containing start and end of X time through in tune in miliseconds
     """
-    
+
     if played_num == 1:
         start = mspb(bpm) * (beats_space + beats_coutin - pickup_beats)
         end = start + pickup_beats + parts * ( mspb(bpm) * (measures_in_parts * beats_per_measure))
         return {'start': start, 'end': end}
     else:
-        time_passed = mspb(bpm) * ((beats_space + beats_coutin) 
+        time_passed = mspb(bpm) * ((beats_space + beats_coutin)
                                    + ((played_num -1) * parts * measures_in_parts * beats_per_measure))
         end = time_passed + parts * ( mspb(bpm) * (measures_in_parts * beats_per_measure))
         return {'start':time_passed, 'end': end}
@@ -69,7 +70,7 @@ def tune_end_start_stop(bpm,beats_space,beats_coutin,pickup_beats,played_num,
                         parts,beats_ending,measures_in_parts=16,beats_per_measure=2):
     """
     Calculates milliseconds for beginning and end of ending of tune
-    
+
     Parameters
     ----------
         bpm (int): beats per minute
@@ -83,12 +84,12 @@ def tune_end_start_stop(bpm,beats_space,beats_coutin,pickup_beats,played_num,
             Default = 16
         beats_per_measure (int)(optional): beats per measure
             Default = 2
-    
+
     Returns
     -------
         dict: list containing start and end of ending in tune in miliseconds
     """
-    time_passed = mspb(bpm) * ((beats_space + beats_coutin) 
+    time_passed = mspb(bpm) * ((beats_space + beats_coutin)
                                + ((played_num) * parts * measures_in_parts * beats_per_measure))
     end = time_passed + (mspb(bpm) * beats_ending)
     return {'start':time_passed, 'end': end}
@@ -100,7 +101,7 @@ def url_to_download(tune_url):
     Parameters
     ----------
         tune_url (str): url for tune
-    
+
     Returns
     -------
         str: file name in autosession media folder
@@ -109,7 +110,7 @@ def url_to_download(tune_url):
     # File Name
     f_name = tune_url.split("/")[-1]
     # Download Path
-    f_path = media_root + '\\' + f_name
+    f_path = media_root / f_name
 
     # Test If File Already Downloaded
     if os.path.exists(f_path):
@@ -121,7 +122,7 @@ def url_to_download(tune_url):
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
         raise SystemExit(err)
-    
+
     # Write File to Media Folder
     if 'wav' in r.headers['Content-Type']:
         open(f_path, 'wb').write(r.content)
@@ -139,27 +140,27 @@ def combine_tunes(tune_list, output_name):
     ----------
         tune_list (list(dict)): custom dict in list
         out_name (str): name of file to be created
-    
+
     Returns
     -------
         bool: True if Completed
     """
-    
+
     # Test If File Already Created
-    if os.path.exists(media_root + '\\' + output_name):
+    if (media_root / output_name).exists():
         return True
-    
+
     # Create Empty audio segment to add too
     set_try = AudioSegment.empty()
 
     # Loop through tunes
     for tune in tune_list:
-        file_location = media_root + '\\' + tune['file']
+        file_location = media_root / tune['file']
         audio = AudioSegment.from_wav(file_location)
         set_try += audio[tune['tune_time']['start']:tune['tune_time']['end']]
-    
+
     # Export Files
-    set_try.export(media_root + '\\' + output_name, format='wav')
+    set_try.export(media_root / output_name, format='wav')
     set_try = None
 
     return True
