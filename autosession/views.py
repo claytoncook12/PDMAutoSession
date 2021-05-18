@@ -7,7 +7,7 @@ from rest_framework import generics
 from .models import TuneType, Tune, Recording
 from .serializers import TuneTypeSerializer, TuneSerializer, RecordingSerializer
 
-from .creating import tune_played_time_start_stop, tune_end_start_stop, url_to_download
+from .creating import tune_played_time_start_stop, tune_end_start_stop, url_to_download, combine_tunes
 
 class TuneTypeList(generics.ListCreateAPIView):
     queryset = TuneType.objects.all()
@@ -101,12 +101,15 @@ class GenerateSet(View):
         # Generate Set Name
         set_fname = ""
         for i, tune in enumerate(tunes):
-            if i != (num_items - 1):
+            if i < (num_items - 1):
                 set_fname += tune['tune'] + "_"
-            else: # Dont add ending doubled file to name
+            elif i == (num_items - 1):
+                set_fname += tune['tune']
+            else: # Dont add ending doubled file name
                 pass
         set_fname += ".wav"
 
-        # Create 
+        # Create Set File
+        combine_tunes(tunes, set_fname)
 
         return JsonResponse({'set': set_fname, 'tunes': tunes})

@@ -129,3 +129,37 @@ def url_to_download(tune_url):
         raise SystemExit("Not a wav file.")
 
     return f_name
+
+def combine_tunes(tune_list, output_name):
+    """
+    Creates Combined wav file of tune list
+    in autosession media folder
+
+    Parameters
+    ----------
+        tune_list (list(dict)): custom dict in list
+        out_name (str): name of file to be created
+    
+    Returns
+    -------
+        bool: True if Completed
+    """
+    
+    # Test If File Already Created
+    if os.path.exists(media_root + '\\' + output_name):
+        return True
+    
+    # Create Empty audio segment to add too
+    set_try = AudioSegment.empty()
+
+    # Loop through tunes
+    for tune in tune_list:
+        file_location = media_root + '\\' + tune['file']
+        audio = AudioSegment.from_wav(file_location)
+        set_try += audio[tune['tune_time']['start']:tune['tune_time']['end']]
+    
+    # Export Files
+    set_try.export(media_root + '\\' + output_name, format='wav')
+    set_try = None
+
+    return True
