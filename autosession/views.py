@@ -7,7 +7,7 @@ from rest_framework import generics
 from .models import TuneType, Tune, Recording
 from .serializers import TuneTypeSerializer, TuneSerializer, RecordingSerializer
 
-from .creating import tune_played_time_start_stop, tune_end_start_stop
+from .creating import tune_played_time_start_stop, tune_end_start_stop, url_to_download
 
 class TuneTypeList(generics.ListCreateAPIView):
     queryset = TuneType.objects.all()
@@ -33,25 +33,80 @@ class RecordingDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Recording.objects.all()
     serializer_class = RecordingSerializer
 
-class GenerateJigSet(View):
+class GenerateSet(View):
     def get(self, request):
-        # Get Random Tune
-        recording = Recording.objects.order_by('?')[0]
+        # Tunes Empty String
+        tunes = []
         
-        # Get Start and Stop Time of Whole Play Through
-        played_time = 1
-        tune_first_time = tune_played_time_start_stop(recording.bpm,
-            recording.beats_space,
-            recording.beats_countin,
-            recording.pickup_beats,
-            played_time,
-            recording.tune.parts)
+        # Get 3 Random Tunes
+        num_items = 3
+        recordings = Recording.objects.order_by('?')[:num_items]
+        
+        # Download those tunes and create tunes list
+        for i, recording in enumerate(recordings):
+            # download recording
+            file = url_to_download(recording.recording_url)
 
-        results = []
-        results.append({
-            'recording_id' : recording.recording_id,
-            'tune': recording.tune.name,
-            'tune_first_time': tune_first_time
-        })
+            # Get Start and Stop Time of Whole First Play Through
+            # If Not Last Tune In Set
+            if i != (num_items - 1):
+                played_time = 1
+                tune_time = tune_played_time_start_stop(recording.bpm,
+                    recording.beats_space,
+                    recording.beats_countin,
+                    recording.pickup_beats,
+                    played_time,
+                    recording.tune.parts)
 
-        return JsonResponse({'results': results})
+                tunes.append({
+                    'recording_id' : recording.recording_id,
+                    'tune': recording.tune.name,
+                    'tune_time': tune_time,
+                    'file': file,
+                })
+            # Get Start and Stop Time of Last Play Through
+            # If Last Tune in Set
+            elif i == (num_items - 1):
+                last_recording = recording # Save Last Recording for Ending Added
+                played_time = recording.repeats
+                tune_time = tune_played_time_start_stop(recording.bpm,
+                    recording.beats_space,
+                    recording.beats_countin,
+                    recording.pickup_beats,
+                    played_time,
+                    recording.tune.parts)
+
+                tunes.append({
+                    'recording_id' : recording.recording_id,
+                    'tune': recording.tune.name,
+                    'tune_time': tune_time,
+                    'file': file,
+                })
+                # Add Ending with Last Tune in Set
+                tune_time_ending = tune_end_start_stop(last_recording.bpm,
+                    last_recording.beats_space,
+                    last_recording.beats_countin,
+                    last_recording.pickup_beats,
+                    played_time,
+                    last_recording.tune.parts,
+                    recording.beats_ending)
+                
+                tunes.append({
+                    'recording_id' : last_recording.recording_id,
+                    'tune': last_recording.tune.name,
+                    'tune_time': tune_time_ending,
+                    'file': file,
+                })
+
+        # Generate Set Name
+        set_fname = ""
+        for i, tune in enumerate(tunes):
+            if i != (num_items - 1):
+                set_fname += tune['tune'] + "_"
+            else: # Dont add ending doubled file to name
+                pass
+        set_fname += ".wav"
+
+        # Create 
+
+        return JsonResponse({'set': set_fname, 'tunes': tunes})

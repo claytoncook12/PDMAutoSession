@@ -123,7 +123,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 # Generated Audio Files Location
-MEDIA_ROOT = os.path.join(BASE_DIR, "autosession/media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "autosession\\media")
 MEDIA_URL = 'autosession/media/'
 
 

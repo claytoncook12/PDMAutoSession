@@ -4,6 +4,17 @@ Functions for creating tunes and tune sets from individual
 recordings in the autosession database
 """
 
+import os
+from datetime import datetime
+
+from django.conf import settings
+
+import requests
+from pydub import AudioSegment
+
+# Setup location for media files
+media_root = settings.MEDIA_ROOT
+
 def mspb(beats_per_minute):
     """
     Calculates milliseconds per beat from beats per minute
@@ -81,3 +92,40 @@ def tune_end_start_stop(bpm,beats_space,beats_coutin,pickup_beats,played_num,
                                + ((played_num) * parts * measures_in_parts * beats_per_measure))
     end = time_passed + (mspb(bpm) * beats_ending)
     return {'start':time_passed, 'end': end}
+
+def url_to_download(tune_url):
+    """
+    Returns file object name locationed in autosession media folder
+
+    Parameters
+    ----------
+        tune_url (str): url for tune
+    
+    Returns
+    -------
+        str: file name in autosession media folder
+    """
+
+    # File Name
+    f_name = tune_url.split("/")[-1]
+    # Download Path
+    f_path = media_root + '\\' + f_name
+
+    # Test If File Already Downloaded
+    if os.path.exists(f_path):
+        return f_name
+
+    # Try to get object
+    try:
+        r = requests.get(tune_url)
+        r.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        raise SystemExit(err)
+    
+    # Write File to Media Folder
+    if 'wav' in r.headers['Content-Type']:
+        open(f_path, 'wb').write(r.content)
+    else:
+        raise SystemExit("Not a wav file.")
+
+    return f_name
