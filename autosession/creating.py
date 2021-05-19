@@ -113,7 +113,7 @@ def url_to_download(tune_url):
     f_path = media_root / f_name
 
     # Test If File Already Downloaded
-    if os.path.exists(f_path):
+    if f_path.exists():
         return f_name
 
     # Try to get object
