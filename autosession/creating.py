@@ -33,8 +33,14 @@ def mspb(beats_per_minute):
 
     return (60/bpm)*1000
 
-def tune_played_time_start_stop(bpm,beats_space,beats_coutin,pickup_beats,played_num,
-                                parts,measures_in_parts=16,beats_per_measure=2):
+def tune_played_time_start_stop(bpm,
+                                beats_space,
+                                beats_coutin,
+                                pickup_beats,
+                                played_num,
+                                parts,
+                                measures_in_parts=16,
+                                beats_per_measure=2):
     """
     Calculates milliseconds for beginning and end of X time through tune
 
@@ -66,8 +72,15 @@ def tune_played_time_start_stop(bpm,beats_space,beats_coutin,pickup_beats,played
         end = time_passed + parts * ( mspb(bpm) * (measures_in_parts * beats_per_measure))
         return {'start':time_passed, 'end': end}
 
-def tune_end_start_stop(bpm,beats_space,beats_coutin,pickup_beats,played_num,
-                        parts,beats_ending,measures_in_parts=16,beats_per_measure=2):
+def tune_end_start_stop(bpm,
+                        beats_space,
+                        beats_coutin,
+                        pickup_beats,
+                        played_num,
+                        parts,
+                        beats_ending,
+                        measures_in_parts=16,
+                        beats_per_measure=2):
     """
     Calculates milliseconds for beginning and end of ending of tune
 
