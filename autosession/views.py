@@ -101,13 +101,8 @@ class GenerateSet(View):
                 })
 
         # Generate Set Name
-        set_fname = ""
-        for i, tune in enumerate(tunes):
-            if i < (num_items - 1):
-                set_fname += tune['tune'] + "_"
-            elif i == (num_items - 1):
-                set_fname += tune['tune']
-        set_fname += ".wav"
+        # Leave Last Name Out Since it Is Doubled For Ending
+        set_fname = "_".join(x['tune'] for x in tunes[:-1]) + ".wav"
 
         # Create Set File
         combine_tunes(tunes, set_fname)
