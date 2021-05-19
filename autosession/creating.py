@@ -154,10 +154,6 @@ def combine_tunes(tune_list, output_name):
     ----------
         tune_list (list(dict)): custom dict in list
         out_name (str): name of file to be created
-
-    Returns
-    -------
-        bool: True if Completed
     """
 
     # Test If File Already Created
@@ -175,5 +171,3 @@ def combine_tunes(tune_list, output_name):
 
     # Export Files
     set_try.export(media_root / output_name, format='wav')
-
-    return True
