@@ -130,11 +130,8 @@ def url_to_download(tune_url):
         return f_name
 
     # Try to get object
-    try:
-        r = requests.get(tune_url)
-        r.raise_for_status()
-    except requests.exceptions.HTTPError as err:
-        raise SystemExit(err)
+    r = requests.get(tune_url)
+    r.raise_for_status()
 
     # Write File to Media Folder
     if 'wav' in r.headers['Content-Type']:
