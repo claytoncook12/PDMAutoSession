@@ -14,7 +14,7 @@ import requests
 from pydub import AudioSegment
 
 # Setup location for media files
-media_root = Path(settings.MEDIA_ROOT)
+MEDIA_ROOT = Path(settings.MEDIA_ROOT)
 
 class WrongFileType(Exception):
     pass
@@ -126,7 +126,7 @@ def url_to_download(tune_url):
     # File Name
     f_name = tune_url.split("/")[-1]
     # Download Path
-    f_path = media_root / f_name
+    f_path = MEDIA_ROOT / f_name
 
     # Test If File Already Downloaded
     if f_path.exists():
@@ -157,7 +157,7 @@ def combine_tunes(tune_list, output_name):
     """
 
     # Test If File Already Created
-    if (media_root / output_name).exists():
+    if (MEDIA_ROOT / output_name).exists():
         return True
 
     # Create Empty audio segment to add too
@@ -165,9 +165,9 @@ def combine_tunes(tune_list, output_name):
 
     # Loop through tunes
     for tune in tune_list:
-        file_location = media_root / tune['file']
+        file_location = MEDIA_ROOT / tune['file']
         audio = AudioSegment.from_wav(file_location)
         set_try += audio[tune['tune_time']['start']:tune['tune_time']['end']]
 
     # Export Files
-    set_try.export(media_root / output_name, format='wav')
+    set_try.export(MEDIA_ROOT / output_name, format='wav')
