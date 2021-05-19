@@ -16,6 +16,9 @@ from pydub import AudioSegment
 # Setup location for media files
 media_root = Path(settings.MEDIA_ROOT)
 
+class WrongFileType(Exception):
+    pass
+
 def mspb(beats_per_minute):
     """
     Calculates milliseconds per beat from beats per minute
@@ -133,12 +136,13 @@ def url_to_download(tune_url):
     r = requests.get(tune_url)
     r.raise_for_status()
 
+    # Check If .wav file
+    if 'wav' not in r.headers['Content-Type']:
+        raise WrongFileType(f'File at {tune_url} is not a wav file.')
+    
     # Write File to Media Folder
-    if 'wav' in r.headers['Content-Type']:
-        open(f_path, 'wb').write(r.content)
-    else:
-        raise SystemExit("Not a wav file.")
-
+    open(f_path, 'wb').write(r.content)
+        
     return f_name
 
 def combine_tunes(tune_list, output_name):
