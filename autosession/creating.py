@@ -175,6 +175,5 @@ def combine_tunes(tune_list, output_name):
 
     # Export Files
     set_try.export(media_root / output_name, format='wav')
-    set_try = None
 
     return True
