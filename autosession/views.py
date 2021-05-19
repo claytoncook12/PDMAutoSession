@@ -107,8 +107,6 @@ class GenerateSet(View):
                 set_fname += tune['tune'] + "_"
             elif i == (num_items - 1):
                 set_fname += tune['tune']
-            else: # Dont add ending doubled file name
-                pass
         set_fname += ".wav"
 
         # Create Set File
