@@ -124,7 +124,7 @@ def url_to_download(tune_url):
     """
 
     # File Name
-    f_name = tune_url.split("/")[-1]
+    f_name = Path(tune_url).name
     # Download Path
     f_path = MEDIA_ROOT / f_name
 
