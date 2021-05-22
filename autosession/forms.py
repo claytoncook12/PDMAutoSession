@@ -1,28 +1,17 @@
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, widgets
 from .models import Tune
 
-repeats_choice = (
-    (1,1),
-    (2,2),
-    (3,3),
-    (4,4),
-    (5,5),
-    (6,6),
-    (7,7),
-    (8,8),
-    (9,9),
-    (10,10),
-)
-
-bpm_choice = (
-    (100, 100),
-)
+# Choice Options
+repeats_choice = ((i,i) for i in range(1,11))
+bpm_choice = ((i, i) for i in range(100,110,10))
 
 class SetOptionsForm(forms.Form):
     """
     Form for selecting set options
     """
+    tunes = Tune.objects.all()
+    tunes = forms.ModelMultipleChoiceField(queryset=tunes,widget=widgets.SelectMultiple(attrs={'size': len(tunes)}))
     beats_per_minute = forms.ChoiceField(choices=bpm_choice)
     number_of_repeats = forms.ChoiceField(choices=repeats_choice)
     
