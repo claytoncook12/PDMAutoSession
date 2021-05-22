@@ -11,6 +11,15 @@ from .serializers import TuneTypeSerializer, TuneSerializer, RecordingSerializer
 
 from .creating import tune_played_time_start_stop, tune_end_start_stop, url_to_download, combine_tunes
 
+# HTML Page Views
+def set_selection(request):
+    """
+    Select Used Tunes in Set Creation
+    """
+
+    return render(request, 'autosession/set_selection.html')
+
+# API Views
 class TuneTypeList(generics.ListCreateAPIView):
     queryset = TuneType.objects.all()
     serializer_class = TuneTypeSerializer
