@@ -11,7 +11,7 @@ class SetOptionsForm(forms.Form):
     Form for selecting set options
     """
     tunes = Tune.objects.all()
-    tunes = forms.ModelMultipleChoiceField(queryset=tunes,widget=widgets.SelectMultiple(attrs={'size': len(tunes)}))
+    tunes = forms.ModelMultipleChoiceField(queryset=tunes,widget=forms.CheckboxSelectMultiple())
     beats_per_minute = forms.ChoiceField(choices=bpm_choice)
     number_of_repeats = forms.ChoiceField(choices=repeats_choice)
     
