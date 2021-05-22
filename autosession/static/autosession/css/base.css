@@ -1,0 +1,8 @@
+h1, h2, h3, h4 {text-align: center}
+h1 {padding-top: 25px;}
+.container {background-color: #F8F9FA;}
+#page-container {position: relative; min-height: 100vh}
+#content-wrap {padding-bottom: 2.5rem;/* Footer height */}
+#footer {position: absolute; bottom: 0; width: 100%; height: 2.5rem;/* Footer height */}
+.fa-youtube {color: red}
+#myTable {overflow-wrap: break-word;}
