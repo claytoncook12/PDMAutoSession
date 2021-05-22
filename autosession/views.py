@@ -9,6 +9,8 @@ from rest_framework import generics
 from .models import TuneType, Tune, Recording
 from .serializers import TuneTypeSerializer, TuneSerializer, RecordingSerializer
 
+from .forms import SetOptionsForm
+
 from .creating import tune_played_time_start_stop, tune_end_start_stop, url_to_download, combine_tunes
 
 # HTML Page Views
@@ -17,7 +19,14 @@ def set_selection(request):
     Select Used Tunes in Set Creation
     """
 
-    return render(request, 'autosession/set_selection.html')
+    if request.method == 'POST':
+        #TODO
+        pass
+    else:
+        form = SetOptionsForm
+
+
+    return render(request, 'autosession/set_selection.html', {'form': form})
 
 # API Views
 class TuneTypeList(generics.ListCreateAPIView):
