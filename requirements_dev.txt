@@ -1,0 +1,6 @@
+# ffmpeg requirement for pydub
+# choco install ffmpeg on my windows machine within venv
+# C:\ProgramData\chocolatey\lib\ffmpeg\tools
+
+pylint==2.6.0
+notebook
