@@ -31,7 +31,13 @@ def set_selection(request):
             bpm = request.GET.get('beats_per_minute')
             repeats = request.GET.get('number_of_repeats')
 
-            
+            # Make Sure At Least One Tune and One Insturment is Selected
+            if len(tunes_id_list) == 0 or len(insturment_id_list) == 0:
+                form_error_message = "Please select at least one tune and one insturment."
+                return render(request, 'autosession/set_selection.html', {'form': form, 
+                                                                          'form_error_message': form_error_message})
+
+
             return render(request, 'autosession/set_selection.html', {'form': form, 
                                                                     'show_select': show_selected,
                                                                     'tunes_id_list': tunes_id_list,
