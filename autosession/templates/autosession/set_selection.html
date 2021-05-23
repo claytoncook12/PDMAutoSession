@@ -3,12 +3,24 @@
 
 {% block content %}
 
-<h1>Set Tune Selection</h1>
+<h1>Tune Set Selection</h1>
 
-<form action="" method="post">
+<form action="">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Submit">
+    <input type="submit" value="Create Tune Set">
 </form>
 
+
+{% if show_select %}
+    <h2>Selected Data</h2>
+    <br>
+    Tunes Selected: {{ tunes_id_list }}
+    <br>
+    Insturment Selected: {{ insturment_id_list }}
+    <br>
+    Beats Per Minute: {{ bpm }}
+    <br>
+    Number of Repeats: {{ repeats }}
+{% endif %}
 {% endblock %}

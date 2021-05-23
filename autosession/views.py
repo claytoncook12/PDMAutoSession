@@ -19,14 +19,40 @@ def set_selection(request):
     Select Used Tunes in Set Creation
     """
 
-    if request.method == 'POST':
-        #TODO
-        pass
-    else:
+    if request.method == 'GET':
         form = SetOptionsForm
 
+        # Get Data from form if present
+        show_selected = None
+        if request.GET:
+            show_selected = True
+            tunes_id_list = request.GET.getlist('tunes_select')
+            insturment_id_list = request.GET.getlist('insturment_select')
+            bpm = request.GET.get('beats_per_minute')
+            repeats = request.GET.get('number_of_repeats')
 
-    return render(request, 'autosession/set_selection.html', {'form': form})
+            
+            return render(request, 'autosession/set_selection.html', {'form': form, 
+                                                                    'show_select': show_selected,
+                                                                    'tunes_id_list': tunes_id_list,
+                                                                    'insturment_id_list': insturment_id_list,
+                                                                    'bpm': bpm,
+                                                                    'repeats': repeats})
+        
+        return render(request, 'autosession/set_selection.html', {'form': form, 
+                                                                  'show_select': show_selected})
+
+    else:
+        form = SetOptionsForm(request.POST)
+        if form.is_valid():
+            return render(request, 'autosession/set_selection.html')
+
+def set_play(request):
+    """
+    Play Created Set
+    """
+
+    return render(request, 'autosession/set_play.html')
 
 # API Views
 class TuneTypeList(generics.ListCreateAPIView):

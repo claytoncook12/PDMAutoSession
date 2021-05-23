@@ -13,5 +13,6 @@ urlpatterns = [
     path('tunes/', TuneList.as_view()),
     path('tunes/<int:pk>', TuneDetail.as_view()),
     path('GenerateSet/', GenerateSet.as_view()),
-    path('SetSelection/', views.set_selection, name='set_selection')
+    path('SetSelection/', views.set_selection, name='set_selection'),
+    path('SetPlay/', views.set_play, name='set_play')
 ]
