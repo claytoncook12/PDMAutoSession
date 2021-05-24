@@ -27,13 +27,20 @@ def set_selection(request):
         if request.GET:
             show_selected = True
             tunes_id_list = request.GET.getlist('tunes_select')
+            number_of_tunes_in_set = request.GET.get('number_of_tunes_in_set')
             insturment_id_list = request.GET.getlist('insturment_select')
             bpm = request.GET.get('beats_per_minute')
             repeats = request.GET.get('number_of_repeats')
 
+            # Condition Checks for Form
+            form_error_message = []
             # Make Sure At Least One Tune and One Insturment is Selected
             if len(tunes_id_list) == 0 or len(insturment_id_list) == 0:
-                form_error_message = "Please select at least one tune and one insturment."
+                form_error_message += ["Please select at least one tune and one insturment."]
+            if int(number_of_tunes_in_set) > len(tunes_id_list):
+                form_error_message += ["Number of tunes in set must be less than or equal to \
+                number of selected tunes."]
+            if len(form_error_message) > 0: # If there are errors in form   
                 return render(request, 'autosession/set_selection.html', {'form': form, 
                                                                           'form_error_message': form_error_message})
 
@@ -41,6 +48,7 @@ def set_selection(request):
             return render(request, 'autosession/set_selection.html', {'form': form, 
                                                                     'show_select': show_selected,
                                                                     'tunes_id_list': tunes_id_list,
+                                                                    'number_of_tunes_in_set': number_of_tunes_in_set,
                                                                     'insturment_id_list': insturment_id_list,
                                                                     'bpm': bpm,
                                                                     'repeats': repeats})
@@ -158,7 +166,7 @@ class GenerateSet(View):
         combine_tunes(tunes, set_fname)
 
         # See results response
-        # return JsonResponse({'set': set_fname, 'tunes': tunes})
+        return JsonResponse({'set': set_fname, 'repeats_per_tune': 1, 'tunes': tunes})
 
         # Redirect to new file created
-        return redirect(settings.MEDIA_URL + set_fname)
+        # return redirect(settings.MEDIA_URL + set_fname)

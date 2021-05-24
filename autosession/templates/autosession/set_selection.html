@@ -7,7 +7,9 @@
 
 {% if form_error_message %}
 <div class="alert alert-warning" role="alert">
-    {{ form_error_message }}
+    {% for error in form_error_message %}
+        Error: {{ error }}<br>
+    {% endfor %}
 </div>
 {% endif %}
 
@@ -22,6 +24,8 @@
     <h2>Selected Data</h2>
     <br>
     Tunes Selected: {{ tunes_id_list }}
+    <br>
+    Tunes In Set: {{ number_of_tunes_in_set }}
     <br>
     Insturment Selected: {{ insturment_id_list }}
     <br>

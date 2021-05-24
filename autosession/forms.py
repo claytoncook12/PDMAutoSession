@@ -13,7 +13,10 @@ class SetOptionsForm(forms.Form):
     tunes = Tune.objects.all()
     insturment = Instrument.objects.all()
 
+    number_of_tunes_in_set_choice = ((i,i) for i in range(1,len(tunes)+1))
+
     tunes_select = forms.ModelMultipleChoiceField(queryset=tunes,widget=forms.CheckboxSelectMultiple())
+    number_of_tunes_in_set = forms.ChoiceField(choices=number_of_tunes_in_set_choice)
     insturment_select = forms.ModelMultipleChoiceField(queryset=insturment,widget=forms.CheckboxSelectMultiple())
     beats_per_minute = forms.ChoiceField(choices=bpm_choice)
     number_of_repeats = forms.ChoiceField(choices=repeats_choice)
