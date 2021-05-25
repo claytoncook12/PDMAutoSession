@@ -76,13 +76,6 @@ def set_selection(request):
         if form.is_valid():
             return render(request, 'autosession/set_selection.html')
 
-def set_play(request):
-    """
-    Play Created Set
-    """
-
-    return render(request, 'autosession/set_play.html')
-
 # API Views
 class TuneTypeList(generics.ListCreateAPIView):
     queryset = TuneType.objects.all()
