@@ -13,7 +13,7 @@ venv.bak/
 *.pyc
 __pycache__
 db.sqlite3
-media
+
 
 # Python #
 *.py[cod]
@@ -46,5 +46,4 @@ coverage.xml
 !.vscode/extensions.json
 .history
 
-autosession/media
 **.swp
