@@ -10,7 +10,9 @@ class SetOptionsForm(forms.Form):
     """
     Form for selecting set options
     """
-    tunes = Tune.objects.all()
+    tunes = Tune.objects.all() # Possible to have tune without recording and can cause error in creating form
+                               # since could have a tune in the form that does not have a recording
+                               # to use for audio creation
     insturment = Instrument.objects.all()
 
     number_of_tunes_in_set_choice = ((i,i) for i in range(1,len(tunes)+1))

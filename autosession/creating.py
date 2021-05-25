@@ -191,7 +191,7 @@ def recordings_model_obj(tune_id_list, num_items):
 
     return Recording.objects.filter(tune__tune_id__in=tune_id_list).order_by('?')[:num_items]
 
-def tunes_list_start_stop(recordings_model_obj, num_repeats):
+def tunes_list_start_stop(recordings_model_obj, num_repeats=1):
     """
     Creates special dict[list] for creating set and downloads 
     needed files into media folder
@@ -327,4 +327,5 @@ def tunes_list_start_stop(recordings_model_obj, num_repeats):
     [unduplicated_tune_names.append(x['tune']) for x in tunes if x['tune'] not in unduplicated_tune_names]
     set_fname = str(num_repeats) + "_" + "_".join(unduplicated_tune_names) + ".wav"
     
-    return {'set': set_fname, 'repeats_per_tune': num_repeats, 'tunes': tunes}
+    return {'set_file_name': set_fname, 'set_tunes': unduplicated_tune_names,
+            'repeats_per_tune': num_repeats, 'tunes': tunes}

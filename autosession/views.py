@@ -11,7 +11,13 @@ from .serializers import TuneTypeSerializer, TuneSerializer, RecordingSerializer
 
 from .forms import SetOptionsForm
 
-from .creating import tune_played_time_start_stop, tune_end_start_stop, url_to_download, combine_tunes
+from .creating import (tune_played_time_start_stop,
+                       tune_end_start_stop,
+                       url_to_download,
+                       combine_tunes,
+                       recordings_model_obj,
+                       tunes_list_start_stop
+)
 
 # HTML Page Views
 def set_selection(request):
@@ -31,7 +37,7 @@ def set_selection(request):
             insturment_id_list = request.GET.getlist('insturment_select')
             bpm = request.GET.get('beats_per_minute')
             repeats = request.GET.get('number_of_repeats')
-
+            
             # Condition Checks for Form
             form_error_message = []
             # Make Sure At Least One Tune and One Insturment is Selected
@@ -44,6 +50,12 @@ def set_selection(request):
                 return render(request, 'autosession/set_selection.html', {'form': form, 
                                                                           'form_error_message': form_error_message})
 
+            # If No Errors in Form Generate Set File
+            rec_obj = recordings_model_obj(tunes_id_list, int(number_of_tunes_in_set))
+            tunes_creation_file = tunes_list_start_stop(rec_obj, int(repeats))
+            combine_tunes(tunes_creation_file['tunes'], tunes_creation_file['set_file_name'])
+            floc = settings.MEDIA_URL + tunes_creation_file['set_file_name']
+
 
             return render(request, 'autosession/set_selection.html', {'form': form, 
                                                                     'show_select': show_selected,
@@ -51,7 +63,10 @@ def set_selection(request):
                                                                     'number_of_tunes_in_set': number_of_tunes_in_set,
                                                                     'insturment_id_list': insturment_id_list,
                                                                     'bpm': bpm,
-                                                                    'repeats': repeats})
+                                                                    'repeats': repeats,
+                                                                    'tunes_creation_file': tunes_creation_file,
+                                                                    'audio_file': floc,
+                                                                    'set_tunes': tunes_creation_file['set_tunes']})
         
         return render(request, 'autosession/set_selection.html', {'form': form, 
                                                                   'show_select': show_selected})

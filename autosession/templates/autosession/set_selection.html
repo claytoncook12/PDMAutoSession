@@ -13,16 +13,34 @@
 </div>
 {% endif %}
 
+{% if show_select %}
+    <h2>Created Set Wav File</h2>
+    
+    Set Order
+    <ol>
+    {% for t in set_tunes %}
+        <li>{{ t|capfirst }}</li>
+    {% endfor  %}
+    </ol>
+    
+    <audio controls>
+        <source src="{{ audio_file }}" type="audio/wav">
+      Your browser does not support the audio element.
+    </audio>    
+    <br>
+{% endif %}
+
+<br>
+<h2>Options for Set Creation</h2>
 <form action="">
     {% csrf_token %}
     {{ form.as_p }}
     <input type="submit" value="Create Tune Set">
 </form>
 
-
 {% if show_select %}
-    <h2>Selected Data</h2>
     <br>
+    <h2>Selected Data</h2>
     Tunes Selected: {{ tunes_id_list }}
     <br>
     Tunes In Set: {{ number_of_tunes_in_set }}
@@ -32,5 +50,9 @@
     Beats Per Minute: {{ bpm }}
     <br>
     Number of Repeats: {{ repeats }}
+    <br>
+    Tunes Creation File:<br>
+    {{ tunes_creation_file }}
 {% endif %}
+
 {% endblock %}
