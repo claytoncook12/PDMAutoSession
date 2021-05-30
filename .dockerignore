@@ -1,0 +1,4 @@
+.notebooks
+.venv
+
+db.sqlite3
