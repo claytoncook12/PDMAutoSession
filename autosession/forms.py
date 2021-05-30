@@ -10,16 +10,17 @@ class SetOptionsForm(forms.Form):
     """
     Form for selecting set options
     """
-    tunes = Tune.objects.all() # Possible to have tune without recording and can cause error in creating form
-                               # since could have a tune in the form that does not have a recording
-                               # to use for audio creation
-    insturment = Instrument.objects.all()
-
-    number_of_tunes_in_set_choice = ((i,i) for i in range(1,len(tunes)+1))
-
-    tunes_select = forms.ModelMultipleChoiceField(queryset=tunes,widget=forms.CheckboxSelectMultiple())
-    number_of_tunes_in_set = forms.ChoiceField(choices=number_of_tunes_in_set_choice)
-    insturment_select = forms.ModelMultipleChoiceField(queryset=insturment,widget=forms.CheckboxSelectMultiple())
+    tunes_select = forms.ModelMultipleChoiceField(queryset=Tune.objects.all(),widget=forms.CheckboxSelectMultiple())
+    number_of_tunes_in_set = forms.ChoiceField(choices=(1,1)) # using placeholder value
+    insturment_select = forms.ModelMultipleChoiceField(queryset=Instrument.objects.all(),widget=forms.CheckboxSelectMultiple())
     beats_per_minute = forms.ChoiceField(choices=bpm_choice)
     number_of_repeats = forms.ChoiceField(choices=repeats_choice)
-    
+
+    def __init__(self, *args, **kwargs):
+        super(SetOptionsForm, self).__init__(*args, **kwargs)
+        # Need to move choices into __init__ so that it is
+        # generated each time the form is called, not initialized on server (re)start
+        # http://www.ilian.io/django-forms-choicefield-with-dynamic-values/
+        # was causing error with makemigration showing no table names autosession_tune
+        self.fields['number_of_tunes_in_set'] = forms.ChoiceField(choices=((i,i) for i in range(1,len(Tune.objects.all())+1)))
+
