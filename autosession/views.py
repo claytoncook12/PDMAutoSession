@@ -20,6 +20,9 @@ from .creating import (tune_played_time_start_stop,
 )
 
 # HTML Page Views
+def home(request):
+    return render(request, 'autosession/home.html')
+
 def set_selection(request):
     """
     Select Used Tunes in Set Creation
