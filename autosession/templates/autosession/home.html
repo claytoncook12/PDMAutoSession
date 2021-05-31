@@ -2,8 +2,21 @@
 {% load static %}
 
 {% block content %}
-    <img class="img-fluid" src="{% static 'autosession/PDMAutoSession_image.png' %}" style="padding: 5px;">
+    <img class="img-fluid" src="{% static 'autosession/PDMAutoSession_image.png' %}" 
+         style="display: block;
+                margin-left: auto;
+                margin-right: auto;
+                padding: 5px;
+                 max-height: 600px">
     <br>
+    <br>
+
+    <button type="button" 
+            class="btn btn-outline-success btn-lg btn-block"
+            onclick="window.location.href='{% url 'autosession:set_selection' %}';"
+    >
+        Create A Set
+    </button>
     <br>
 
     <p style="text-align: center;">
