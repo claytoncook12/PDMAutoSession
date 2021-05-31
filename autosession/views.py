@@ -9,15 +9,75 @@ from rest_framework import generics
 from .models import TuneType, Tune, Recording
 from .serializers import TuneTypeSerializer, TuneSerializer, RecordingSerializer
 
-from .creating import tune_played_time_start_stop, tune_end_start_stop, url_to_download, combine_tunes
+from .forms import SetOptionsForm
+
+from .creating import (tune_played_time_start_stop,
+                       tune_end_start_stop,
+                       url_to_download,
+                       combine_tunes,
+                       recordings_model_obj,
+                       tunes_list_start_stop
+)
 
 # HTML Page Views
+def home(request):
+    return render(request, 'autosession/home.html')
+
 def set_selection(request):
     """
     Select Used Tunes in Set Creation
     """
 
-    return render(request, 'autosession/set_selection.html')
+    if request.method == 'GET':
+        form = SetOptionsForm
+
+        # Get Data from form if present
+        show_selected = None
+        if request.GET:
+            show_selected = True
+            tunes_id_list = request.GET.getlist('tunes_select')
+            number_of_tunes_in_set = request.GET.get('number_of_tunes_in_set')
+            insturment_id_list = request.GET.getlist('insturment_select')
+            bpm = request.GET.get('beats_per_minute')
+            repeats = request.GET.get('number_of_repeats')
+            
+            # Condition Checks for Form
+            form_error_message = []
+            # Make Sure At Least One Tune and One Insturment is Selected
+            if len(tunes_id_list) == 0 or len(insturment_id_list) == 0:
+                form_error_message += ["Please select at least one tune and one insturment."]
+            if int(number_of_tunes_in_set) > len(tunes_id_list):
+                form_error_message += ["Number of tunes in set must be less than or equal to \
+                number of selected tunes."]
+            if len(form_error_message) > 0: # If there are errors in form   
+                return render(request, 'autosession/set_selection.html', {'form': form, 
+                                                                          'form_error_message': form_error_message})
+
+            # If No Errors in Form Generate Set File
+            rec_obj = recordings_model_obj(tunes_id_list, int(number_of_tunes_in_set))
+            tunes_creation_file = tunes_list_start_stop(rec_obj, int(repeats))
+            combine_tunes(tunes_creation_file['tunes'], tunes_creation_file['set_file_name'])
+            floc = settings.MEDIA_URL + tunes_creation_file['set_file_name']
+
+
+            return render(request, 'autosession/set_selection.html', {'form': form, 
+                                                                    'show_select': show_selected,
+                                                                    'tunes_id_list': tunes_id_list,
+                                                                    'number_of_tunes_in_set': number_of_tunes_in_set,
+                                                                    'insturment_id_list': insturment_id_list,
+                                                                    'bpm': bpm,
+                                                                    'repeats': repeats,
+                                                                    'tunes_creation_file': tunes_creation_file,
+                                                                    'audio_file': floc,
+                                                                    'set_tunes': tunes_creation_file['set_tunes']})
+        
+        return render(request, 'autosession/set_selection.html', {'form': form, 
+                                                                  'show_select': show_selected})
+
+    else:
+        form = SetOptionsForm(request.POST)
+        if form.is_valid():
+            return render(request, 'autosession/set_selection.html')
 
 # API Views
 class TuneTypeList(generics.ListCreateAPIView):
@@ -117,7 +177,7 @@ class GenerateSet(View):
         combine_tunes(tunes, set_fname)
 
         # See results response
-        # return JsonResponse({'set': set_fname, 'tunes': tunes})
+        return JsonResponse({'set': set_fname, 'repeats_per_tune': 1, 'tunes': tunes})
 
         # Redirect to new file created
-        return redirect(settings.MEDIA_URL + set_fname)
+        # return redirect(settings.MEDIA_URL + set_fname)
