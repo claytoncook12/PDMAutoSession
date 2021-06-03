@@ -140,7 +140,8 @@ def url_to_download(tune_url):
 
     # Check If .wav file
     if 'wav' not in r.headers['Content-Type']:
-        raise WrongFileType(f'File at {tune_url} is not a wav file.')
+        if 'mp3' not in r.header['Content-Type']:
+            raise WrongFileType(f'File at {tune_url} needs to be .wav or .mp3 file.')
     
     # Write File to Media Folder
     open(f_path, 'wb').write(r.content)
