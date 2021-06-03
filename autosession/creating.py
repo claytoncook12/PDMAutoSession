@@ -169,11 +169,14 @@ def combine_tunes(tune_list, output_name):
     # Loop through tunes
     for tune in tune_list:
         file_location = MEDIA_ROOT / tune['file']
-        audio = AudioSegment.from_wav(file_location)
+        if file_location.suffix == ".wav":
+            audio = AudioSegment.from_wav(file_location)
+        if file_location.suffix == ".mp3":
+            audio = AudioSegment.from_mp3(file_location)
         set_try += audio[tune['tune_time']['start']:tune['tune_time']['end']]
 
     # Export Files
-    set_try.export(MEDIA_ROOT / output_name, format='wav')
+    set_try.export(MEDIA_ROOT / output_name, format='mp3')
 
 def recordings_model_obj(tune_id_list, num_items):
     """
@@ -326,7 +329,7 @@ def tunes_list_start_stop(recordings_model_obj, num_repeats=1):
     # Generate Set Name
     unduplicated_tune_names = []
     [unduplicated_tune_names.append(x['tune']) for x in tunes if x['tune'] not in unduplicated_tune_names]
-    set_fname = str(num_repeats) + "_" + "_".join(unduplicated_tune_names) + ".wav"
+    set_fname = str(num_repeats) + "_" + "_".join(unduplicated_tune_names) + ".mp3"
     
     return {'set_file_name': set_fname, 'set_tunes': unduplicated_tune_names,
             'repeats_per_tune': num_repeats, 'tunes': tunes}
