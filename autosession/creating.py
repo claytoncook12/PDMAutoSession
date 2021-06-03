@@ -268,7 +268,7 @@ def tunes_list_start_stop(recordings_model_obj, num_repeats=1):
         
         # Get Start and Stop Time of Last Play Through
         # If Last Tune in Set
-        elif i == (num_items - 1):
+        else i == (num_items - 1):
             
             # If Last Tune Is Played for more than once add played time
             # before last repeat
