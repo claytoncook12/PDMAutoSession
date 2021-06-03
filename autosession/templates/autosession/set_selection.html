@@ -32,9 +32,9 @@
 
 <br>
 <h2>Options for Set Creation</h2>
-<form action="">
+<form action="." method='POST'>
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form.as_p }}`
     <input type="submit" value="Create Tune Set">
 </form>
 
