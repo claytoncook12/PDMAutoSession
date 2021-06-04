@@ -14,7 +14,7 @@
 {% endif %}
 
 {% if show_select %}
-    <h2>Created Set Wav File</h2>
+    <h2>Created Set</h2>
     
     Set Order
     <ol>
@@ -22,14 +22,128 @@
         <li>{{ t|capfirst }}</li>
     {% endfor  %}
     </ol>
-    
-    <audio controls>
-        <source src="{{ audio_file }}" type="audio/wav">
-      Your browser does not support the audio element.
-    </audio>    
     <br>
+
+    <!-- Wavesurfer Element -->
+        <div id="waveform"></div>
+
+        <input type="button" id="btn-play" value="Play" disabled="disabled"/>
+        <input type="button" id="btn-pause" value="Pause" disabled="disabled"/>
+        <input type="button" id="btn-stop" value="Stop" disabled="disabled"/>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/2.0.4/wavesurfer.min.js"></script>
+        <script src="https://unpkg.com/wavesurfer.js/dist/plugin/wavesurfer.markers.js"></script>
+
+        <script>
+            // Store the 3 buttons in some object
+            var buttons = {
+                play: document.getElementById("btn-play"),
+                pause: document.getElementById("btn-pause"),
+                stop: document.getElementById("btn-stop")
+            };
+
+            var themeColor = '#0000ff';
+            
+            var Spectrum = WaveSurfer.create({
+                container: '#waveform',
+                height: 200,
+                fillParent: true,
+                //scrollParent: true,
+                progressColor: themeColor,
+                plugins: [
+                    WaveSurfer.markers.create({
+                            // Minimum markers to show that they are there
+                            markers: [
+                                {
+                                    time: 0.0,
+                                    label: "A",
+                                    color: themeColor,
+                                    position: 'top'
+                                },
+                                {
+                                    time: 9.6,
+                                    label: "A:",
+                                    color: themeColor,
+                                    position: 'top'
+                                },
+                                {
+                                    time: 19.2,
+                                    label: "B",
+                                    color: themeColor,
+                                    position: 'top'
+                                },
+                                {
+                                    time: 28.8,
+                                    label: "B:",
+                                    color: themeColor,
+                                    position: 'top'
+                                },
+                                {
+                                    time: 38.4,
+                                    label: "End or Chan",
+                                    color: themeColor,
+                                    position: 'top'
+                                },
+                            ]
+                        })
+                ],
+            });
+            
+            // Handle Play Button
+            buttons.play.addEventListener("click", function(){
+                Spectrum.play();
+
+                buttons.stop.disabled = false;
+                buttons.pause.disabled = false;
+                buttons.play.disabled = true;
+            }, false);
+            
+            // Handle Pause Button
+            buttons.pause.addEventListener("click", function(){
+                Spectrum.pause();
+
+                buttons.pause.disabled = true;
+                buttons.play.disabled = false;
+            }, false);
+
+            // Handle Stop Button
+            buttons.stop.addEventListener("click", function(){
+                Spectrum.stop();
+
+                buttons.stop.disabled = true;
+                buttons.pause.disabled = true;
+                buttons.play.disabled = false;
+            }, false); 
+            
+            // Add a listener to enable the play button once it's ready
+            Spectrum.on('ready', function(){
+                buttons.play.disabled = false;
+            });
+
+            // Responsive chart
+            window.addEventListener("resize", function(){
+                // Get the current progress according to the cursor position
+                var currentProgress = Spectrum.getCurrentTime() / Spectrum.getDuration();
+
+                // Reset graph
+                Spectrum.empty();
+                Spectrum.drawBuffer();
+                // Set original position
+                Spectrum.seekto(currentProgress);
+
+                // Enable/disable respectively buttons
+                buttons.pause.disabled = false;
+                buttons.play.disabled = true;
+                butons.stop.disabled = false;
+            }, false);
+
+            // Load the audio file from the domain
+            Spectrum.load("{{ audio_file }}");
+        </script>
+
 {% endif %}
 
+<br>
 <br>
 <h2>Options for Set Creation</h2>
 <form action="." method='POST'>
